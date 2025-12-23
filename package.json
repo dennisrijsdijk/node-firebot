@@ -23,7 +23,7 @@
     "./dist/node-firebot.cjs.map"
   ],
   "scripts": {
-    "build": "node build.js && tsc -p tsconfig.build.json --declaration --emitDeclarationOnly --outfile ./dist/node-firebot.d.ts",
+    "build": "node build.js && dts-bundle-generator -o ./dist/node-firebot.d.ts ./src/index.ts",
     "prepublishOnly": "npm run build",
     "test": "mocha",
     "lint": "eslint --config eslint.config.mjs"
@@ -36,6 +36,7 @@
     "@types/node": "^25.0.3",
     "@types/ws": "^8.18.1",
     "@typescript-eslint/parser": "^8.50.0",
+    "dts-bundle-generator": "^9.5.1",
     "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "mocha": "^11.7.5",
