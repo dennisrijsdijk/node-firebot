@@ -1,4 +1,5 @@
 import { StatusRoute } from "./routes/status";
+import { EffectsRoute } from "./routes/effects";
 
 export class FirebotClient {
     private host: string;
@@ -7,9 +8,14 @@ export class FirebotClient {
 
     // routes
     private _statusRoute: StatusRoute;
+    private _effectsRoute: EffectsRoute;
 
     get status(): StatusRoute {
         return this._statusRoute;
+    }
+
+    get effects(): EffectsRoute {
+        return this._effectsRoute;
     }
 
     constructor(host: string, port: number = 7472, secure = false) {
@@ -25,5 +31,6 @@ export class FirebotClient {
 
         // initialize routes
         this._statusRoute = new StatusRoute(this, this.baseUrl);
+        this._effectsRoute = new EffectsRoute(this, this.baseUrl);
     }
 }

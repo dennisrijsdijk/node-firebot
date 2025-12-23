@@ -72,3 +72,32 @@ describe("StatusRoute", () => {
         assert.strictEqual(typeof client.status.getStatus, "function");
     });
 });
+
+describe("EffectsRoute", () => {
+    generateStandardRouteTests("effects");
+
+    it("should have getEffects method in EffectsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.effects.getEffects, "function");
+    });
+
+    it("should have getEffect method in EffectsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.effects.getEffect, "function");
+    });
+
+    it("should have runEffects method in EffectsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.effects.runEffects, "function");
+    });
+
+    it("should have getPresetEffectLists method in EffectsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.effects.getPresetEffectLists, "function");
+    });
+
+    it("should have runPresetEffectList method in EffectsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.effects.runPresetEffectList, "function");
+    });
+});
