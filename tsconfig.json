@@ -9,12 +9,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  },
-  "include": ["src/index.ts", "**/*.test.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

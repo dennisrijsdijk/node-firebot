@@ -4,7 +4,7 @@
   "description": "Abstraction over the Firebot REST API and Websocket",
   "license": "MIT",
   "author": "dennisrijsdijk",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/node-firebot.cjs",
   "module": "dist/node-firebot.mjs",
   "types": "dist/node-firebot.d.ts",
@@ -41,7 +41,7 @@
     "eslint": "^9.39.2",
     "mocha": "^11.7.5",
     "rimraf": "^6.1.2",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0"
   },

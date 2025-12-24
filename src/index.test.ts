@@ -1,7 +1,6 @@
 /// <reference types="mocha" />
 import assert from "assert";
-import { FirebotClient } from ".";
-import type { ApiRoute } from "./api-route";
+import { FirebotClient, type ApiRoute } from "./index.ts";
 
 function generateStandardRouteTests(routeName: string) {
     it(`should be accessible from FirebotClient`, () => {
@@ -99,5 +98,39 @@ describe("EffectsRoute", () => {
     it("should have runPresetEffectList method in EffectsRoute", () => {
         const client = new FirebotClient("localhost");
         assert.strictEqual(typeof client.effects.runPresetEffectList, "function");
+    });
+});
+
+describe("CommandsRoute", () => {
+    generateStandardRouteTests("commands");
+
+    it("should have getCustomCommands method in CommandsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.commands.getCustomCommands, "function");
+    });
+
+    it("should have getCustomCommand method in CommandsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.commands.getCustomCommand, "function");
+    });
+
+    it("should have getSystemCommands method in CommandsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.commands.getSystemCommands, "function");
+    });
+
+    it("should have getSystemCommand method in CommandsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.commands.getSystemCommand, "function");
+    });
+
+    it("should have runCustomCommand method in CommandsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.commands.runCustomCommand, "function");
+    });
+
+    it("should have runSystemCommand method in CommandsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.commands.runSystemCommand, "function");
     });
 });
