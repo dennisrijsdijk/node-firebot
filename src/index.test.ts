@@ -167,3 +167,12 @@ describe("CustomVariablesRoute", () => {
         assert.strictEqual(typeof client.customVariables.setCustomVariable, "function");
     });
 });
+
+describe("ReplaceVariablesRoute", () => {
+    generateStandardRouteTests("replaceVariables");
+
+    it("should have getReplaceVariables method in ReplaceVariablesRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.replaceVariables.getReplaceVariables, "function");
+    });
+});
