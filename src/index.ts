@@ -1,6 +1,7 @@
 import { StatusRoute } from "./routes/status";
 import { EffectsRoute } from "./routes/effects";
 import { CommandsRoute } from "./routes/commands";
+import { FontsRoute } from "./routes/fonts";
 import type { ApiRoute } from "./api-route";
 
 export class FirebotClient {
@@ -12,6 +13,7 @@ export class FirebotClient {
     private _statusRoute: StatusRoute;
     private _effectsRoute: EffectsRoute;
     private _commandsRoute: CommandsRoute;
+    private _fontsRoute: FontsRoute;
 
     get status(): StatusRoute {
         return this._statusRoute;
@@ -23,6 +25,10 @@ export class FirebotClient {
 
     get commands(): CommandsRoute {
         return this._commandsRoute;
+    }
+
+    get fonts(): FontsRoute {
+        return this._fontsRoute;
     }
 
     constructor(host: string, port: number = 7472, secure = false) {
@@ -40,6 +46,7 @@ export class FirebotClient {
         this._statusRoute = new StatusRoute(this, this.baseUrl);
         this._effectsRoute = new EffectsRoute(this, this.baseUrl);
         this._commandsRoute = new CommandsRoute(this, this.baseUrl);
+        this._fontsRoute = new FontsRoute(this, this.baseUrl);
     }
 }
 

@@ -1,22 +1,22 @@
 /// <reference types="mocha" />
 import assert from "assert";
-import { FirebotClient, type ApiRoute } from "./index.ts";
+import { FirebotClient } from "./index.ts";
 
-function generateStandardRouteTests(routeName: string) {
+function generateStandardRouteTests(routeName: keyof FirebotClient) {
     it(`should be accessible from FirebotClient`, () => {
         const firebotClient = new FirebotClient("localhost");
-        assert.ok((firebotClient as unknown as Record<string, ApiRoute>)[routeName]);
+        assert.ok(firebotClient[routeName]);
     });
 
     it(`should have correct baseUrl`, () => {
         const firebotClient = new FirebotClient("localhost");
-        const route = (firebotClient as unknown as Record<string, ApiRoute>)[routeName];
+        const route = firebotClient[routeName];
         assert.strictEqual(route["baseUrl"], `http://localhost:7472/api/v1`);
     });
 
     it(`should have access to FirebotClient instance`, () => {
         const firebotClient = new FirebotClient("localhost");
-        const route = (firebotClient as unknown as Record<string, ApiRoute>)[routeName];
+        const route = firebotClient[routeName];
         assert.strictEqual(route["firebotClient"], firebotClient);
     });
 };
@@ -132,5 +132,19 @@ describe("CommandsRoute", () => {
     it("should have runSystemCommand method in CommandsRoute", () => {
         const client = new FirebotClient("localhost");
         assert.strictEqual(typeof client.commands.runSystemCommand, "function");
+    });
+});
+
+describe("FontsRoute", () => {
+    generateStandardRouteTests("fonts");
+
+    it("should have getFonts method in FontsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.fonts.getFonts, "function");
+    });
+
+    it("should have getFont method in FontsRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.fonts.getFont, "function");
     });
 });
