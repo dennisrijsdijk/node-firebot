@@ -148,3 +148,22 @@ describe("FontsRoute", () => {
         assert.strictEqual(typeof client.fonts.getFont, "function");
     });
 });
+
+describe("CustomVariablesRoute", () => {
+    generateStandardRouteTests("customVariables");
+
+    it("should have getCustomVariables method in CustomVariablesRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.customVariables.getCustomVariables, "function");
+    });
+
+    it("should have getCustomVariable method in CustomVariablesRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.customVariables.getCustomVariable, "function");
+    });
+
+    it("should have setCustomVariable method in CustomVariablesRoute", () => {
+        const client = new FirebotClient("localhost");
+        assert.strictEqual(typeof client.customVariables.setCustomVariable, "function");
+    });
+});
