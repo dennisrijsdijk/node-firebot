@@ -90,3 +90,7 @@ describe("ReplaceVariablesRoute", () => {
 describe("ViewersRoute", () => {
     generateStandardRouteTests("viewers");
 });
+
+describe("CustomRolesRoute", () => {
+    generateStandardRouteTests("customRoles");
+});
