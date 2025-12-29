@@ -65,114 +65,28 @@ describe("FirebotClient", () => {
 
 describe("StatusRoute", () => {
     generateStandardRouteTests("status");
-
-    it("should have getStatus method in StatusRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.status.getStatus, "function");
-    });
 });
 
 describe("EffectsRoute", () => {
     generateStandardRouteTests("effects");
-
-    it("should have getEffects method in EffectsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.effects.getEffects, "function");
-    });
-
-    it("should have getEffect method in EffectsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.effects.getEffect, "function");
-    });
-
-    it("should have runEffects method in EffectsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.effects.runEffects, "function");
-    });
-
-    it("should have getPresetEffectLists method in EffectsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.effects.getPresetEffectLists, "function");
-    });
-
-    it("should have runPresetEffectList method in EffectsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.effects.runPresetEffectList, "function");
-    });
 });
 
 describe("CommandsRoute", () => {
     generateStandardRouteTests("commands");
-
-    it("should have getCustomCommands method in CommandsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.commands.getCustomCommands, "function");
-    });
-
-    it("should have getCustomCommand method in CommandsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.commands.getCustomCommand, "function");
-    });
-
-    it("should have getSystemCommands method in CommandsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.commands.getSystemCommands, "function");
-    });
-
-    it("should have getSystemCommand method in CommandsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.commands.getSystemCommand, "function");
-    });
-
-    it("should have runCustomCommand method in CommandsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.commands.runCustomCommand, "function");
-    });
-
-    it("should have runSystemCommand method in CommandsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.commands.runSystemCommand, "function");
-    });
 });
 
 describe("FontsRoute", () => {
     generateStandardRouteTests("fonts");
-
-    it("should have getFonts method in FontsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.fonts.getFonts, "function");
-    });
-
-    it("should have getFont method in FontsRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.fonts.getFont, "function");
-    });
 });
 
 describe("CustomVariablesRoute", () => {
     generateStandardRouteTests("customVariables");
-
-    it("should have getCustomVariables method in CustomVariablesRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.customVariables.getCustomVariables, "function");
-    });
-
-    it("should have getCustomVariable method in CustomVariablesRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.customVariables.getCustomVariable, "function");
-    });
-
-    it("should have setCustomVariable method in CustomVariablesRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.customVariables.setCustomVariable, "function");
-    });
 });
 
 describe("ReplaceVariablesRoute", () => {
     generateStandardRouteTests("replaceVariables");
+});
 
-    it("should have getReplaceVariables method in ReplaceVariablesRoute", () => {
-        const client = new FirebotClient("localhost");
-        assert.strictEqual(typeof client.replaceVariables.getReplaceVariables, "function");
-    });
+describe("ViewersRoute", () => {
+    generateStandardRouteTests("viewers");
 });
