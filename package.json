@@ -1,6 +1,6 @@
 {
   "name": "@dennisrijsdijk/node-firebot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Abstraction over the Firebot REST API and Websocket",
   "license": "MIT",
   "author": "dennisrijsdijk",
