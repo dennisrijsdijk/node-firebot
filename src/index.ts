@@ -6,6 +6,7 @@ import { CustomVariablesRoute } from "./routes/custom-variables";
 import { ReplaceVariablesRoute } from "./routes/replace-variables";
 import { ViewersRoute } from "./routes/viewers";
 import { CustomRolesRoute } from "./routes/custom-roles";
+import { CurrencyRoute } from "./routes/currency";
 import type { ApiRoute } from "./api-route";
 
 export class FirebotClient {
@@ -22,6 +23,7 @@ export class FirebotClient {
     private _replaceVariablesRoute: ReplaceVariablesRoute;
     private _viewersRoute: ViewersRoute;
     private _customRolesRoute: CustomRolesRoute;
+    private _currencyRoute: CurrencyRoute;
 
     get status(): StatusRoute {
         return this._statusRoute;
@@ -55,6 +57,10 @@ export class FirebotClient {
         return this._customRolesRoute;
     }
 
+    get currency(): CurrencyRoute {
+        return this._currencyRoute;
+    }
+
     constructor(host: string, port: number = 7472, secure = false) {
         if (!host || typeof host !== "string" || host.trim() === "") {
             throw new Error("Invalid host");
@@ -75,6 +81,7 @@ export class FirebotClient {
         this._replaceVariablesRoute = new ReplaceVariablesRoute(this, this.baseUrl);
         this._viewersRoute = new ViewersRoute(this, this.baseUrl);
         this._customRolesRoute = new CustomRolesRoute(this, this.baseUrl);
+        this._currencyRoute = new CurrencyRoute(this, this.baseUrl);
     }
 }
 

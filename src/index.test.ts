@@ -94,3 +94,7 @@ describe("ViewersRoute", () => {
 describe("CustomRolesRoute", () => {
     generateStandardRouteTests("customRoles");
 });
+
+describe("CurrencyRoute", () => {
+    generateStandardRouteTests("currency");
+});
