@@ -102,3 +102,7 @@ describe("CurrencyRoute", () => {
 describe("QuotesRoute", () => {
     generateStandardRouteTests("quotes");
 });
+
+describe("CountersRoute", () => {
+    generateStandardRouteTests("counters");
+});
