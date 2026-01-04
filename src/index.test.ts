@@ -110,3 +110,7 @@ describe("CountersRoute", () => {
 describe("TimersRoute", () => {
     generateStandardRouteTests("timers");
 });
+
+describe("QueuesRoute", () => {
+    generateStandardRouteTests("queues");
+});

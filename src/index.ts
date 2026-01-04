@@ -10,6 +10,7 @@ import { CurrencyRoute } from "./routes/currency";
 import { QuotesRoute } from "./routes/quotes";
 import { CountersRoute } from "./routes/counters";
 import { TimersRoute } from "./routes/timers";
+import { QueuesRoute } from "./routes/queues";
 import type { ApiRoute } from "./api-route";
 
 export class FirebotClient {
@@ -30,6 +31,7 @@ export class FirebotClient {
     private _quotesRoute: QuotesRoute;
     private _countersRoute: CountersRoute;
     private _timersRoute: TimersRoute;
+    private _queuesRoute: QueuesRoute;
 
     get status(): StatusRoute {
         return this._statusRoute;
@@ -79,6 +81,10 @@ export class FirebotClient {
         return this._timersRoute;
     }
 
+    get queues(): QueuesRoute {
+        return this._queuesRoute;
+    }
+
     constructor(host: string, port: number = 7472, secure = false) {
         if (!host || typeof host !== "string" || host.trim() === "") {
             throw new Error("Invalid host");
@@ -103,6 +109,7 @@ export class FirebotClient {
         this._quotesRoute = new QuotesRoute(this, this.baseUrl);
         this._countersRoute = new CountersRoute(this, this.baseUrl);
         this._timersRoute = new TimersRoute(this, this.baseUrl);
+        this._queuesRoute = new QueuesRoute(this, this.baseUrl);
     }
 }
 
