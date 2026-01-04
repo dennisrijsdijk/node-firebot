@@ -11,7 +11,13 @@ async function build() {
         sourcemap: true,
         platform: 'node',
         target: 'node20',
-        packages: 'external'
+        packages: 'external',
+        banner: { js: `/**!
+ * @author Dennis Rijsdijk <hello@dennis.gg>
+ * @module @dennisrijsdijk/node-firebot
+ * @license MIT
+ * @copyright Copyright (c) 2026 Dennis Rijsdijk
+ */` }
     };
 
     // Build for CommonJS
