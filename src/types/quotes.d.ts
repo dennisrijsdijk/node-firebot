@@ -10,3 +10,5 @@ export type Quote = {
 export type NewQuote = Omit<Quote, "id">;
 
 export type QuoteUpdate = Partial<Omit<Quote, "id">>;
+
+export type WebsocketQuote = { quote: Partial<Omit<Quote, "id"> & { _id: number }> };

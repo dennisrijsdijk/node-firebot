@@ -1,6 +1,7 @@
 /// <reference types="mocha" />
 import assert from "assert";
 import { FirebotClient } from "./index.ts";
+import type { ApiRoute } from "./api-route.ts";
 
 function generateStandardRouteTests(routeName: keyof FirebotClient) {
     it(`should be accessible from FirebotClient`, () => {
@@ -10,13 +11,13 @@ function generateStandardRouteTests(routeName: keyof FirebotClient) {
 
     it(`should have correct baseUrl`, () => {
         const firebotClient = new FirebotClient("localhost");
-        const route = firebotClient[routeName];
+        const route = firebotClient[routeName] as ApiRoute;
         assert.strictEqual(route["baseUrl"], `http://localhost:7472/api/v1`);
     });
 
     it(`should have access to FirebotClient instance`, () => {
         const firebotClient = new FirebotClient("localhost");
-        const route = firebotClient[routeName];
+        const route = firebotClient[routeName] as ApiRoute;
         assert.strictEqual(route["firebotClient"], firebotClient);
     });
 };

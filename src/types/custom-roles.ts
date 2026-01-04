@@ -5,3 +5,5 @@ export type CustomRole = {
     name: string;
     viewers: BasicViewer[];
 };
+
+export type WebsocketCustomRole = CustomRole & { showBadgeInChat?: boolean };

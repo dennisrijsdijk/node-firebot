@@ -88,6 +88,14 @@ export type PresetEffectList = {
     args: string[];
 };
 
+export type WebsocketPresetEffectList = {
+    id: string;
+    name: string;
+    effects: EffectList;
+    args: { name: string }[];
+    sortTags: string[];
+};
+
 export type RunEffectsMetadata = {
     username?: string;
     [x: string]: unknown;

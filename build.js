@@ -10,7 +10,8 @@ async function build() {
         minify: true,
         sourcemap: true,
         platform: 'node',
-        target: 'node20'
+        target: 'node20',
+        packages: 'external'
     };
 
     // Build for CommonJS

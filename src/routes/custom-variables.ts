@@ -1,19 +1,5 @@
 import { ApiRoute } from "../api-route";
-
-type FirebotCustomVariable = {
-    t: number;
-    v?: string | number | boolean | Record<string, unknown> | Array<unknown>;
-    meta: {
-        persist?: boolean;
-    };
-};
-
-export type CustomVariable = {
-    name: string;
-    data?: string | number | boolean | Record<string, unknown> | Array<unknown>;
-    ttl: number;
-    persist: boolean;
-};
+import { CustomVariable, FirebotCustomVariable } from "../types/custom-variables";
 
 export class CustomVariablesRoute extends ApiRoute {
     /**

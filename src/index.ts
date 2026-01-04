@@ -11,6 +11,7 @@ import { QuotesRoute } from "./routes/quotes";
 import { CountersRoute } from "./routes/counters";
 import { TimersRoute } from "./routes/timers";
 import { QueuesRoute } from "./routes/queues";
+import { FirebotWebSocket } from "./websocket";
 import type { ApiRoute } from "./api-route";
 
 export class FirebotClient {
@@ -32,6 +33,8 @@ export class FirebotClient {
     private _countersRoute: CountersRoute;
     private _timersRoute: TimersRoute;
     private _queuesRoute: QueuesRoute;
+
+    private _ws: FirebotWebSocket;
 
     get status(): StatusRoute {
         return this._statusRoute;
@@ -85,6 +88,10 @@ export class FirebotClient {
         return this._queuesRoute;
     }
 
+    get websocket(): FirebotWebSocket {
+        return this._ws;
+    }
+
     constructor(host: string, port: number = 7472, secure = false) {
         if (!host || typeof host !== "string" || host.trim() === "") {
             throw new Error("Invalid host");
@@ -110,6 +117,8 @@ export class FirebotClient {
         this._countersRoute = new CountersRoute(this, this.baseUrl);
         this._timersRoute = new TimersRoute(this, this.baseUrl);
         this._queuesRoute = new QueuesRoute(this, this.baseUrl);
+
+        this._ws = new FirebotWebSocket(this.host, this.port, secure);
     }
 }
 

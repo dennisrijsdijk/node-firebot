@@ -42,3 +42,9 @@ export type SpecificViewer = FirebotViewer & {
     currency: Record<string, number>;
     customRoles: ViewerCustomRole[];
 };
+
+export type ViewerMetadataUpdate = {
+    username: string;
+    metadataKey: string;
+    metadataValue?: unknown;
+};
