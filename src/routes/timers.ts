@@ -1,6 +1,5 @@
 import { ApiRoute } from "../api-route";
 import type { SimpleTimer, Timer } from "../types/timers";
-import { ApiStatusResponse } from "../types/api";
 
 export class TimersRoute extends ApiRoute {
     /**
@@ -10,7 +9,7 @@ export class TimersRoute extends ApiRoute {
      * @returns {SimpleTimer[]} An array of simple timers.
      */
     async getTimers(): Promise<SimpleTimer[]> {
-        return fetch(`${this.baseUrl}/timers`).then(res => res.json()) as Promise<SimpleTimer[]>;
+        return this.fetch("GET", `${this.baseUrl}/timers`).then(res => res.json()) as Promise<SimpleTimer[]>;
     }
 
     /**
@@ -21,13 +20,8 @@ export class TimersRoute extends ApiRoute {
      * @returns {Timer} The details of the specified timer.
      */
     async getTimer(timerId: string): Promise<Timer> {
-        const response = await fetch(`${this.baseUrl}/timers/${encodeURIComponent(timerId)}`).then(res => res.json()) as Timer | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/timers/${encodeURIComponent(timerId)}`)
+            .then(res => res.json()) as Promise<Timer>;
     }
 
     /**
@@ -38,10 +32,6 @@ export class TimersRoute extends ApiRoute {
      * @param updateMode - The update mode: "enable", "disable", "toggle", or "clear".
      */
     async updateTimer(timerId: string, updateMode: "enable" | "disable" | "toggle" | "clear") {
-        const response = await fetch(`${this.baseUrl}/timers/${encodeURIComponent(timerId)}/${updateMode}`);
-
-        if (!response.ok) {
-            throw new Error((await response.json() as ApiStatusResponse).message);
-        }
+        await this.fetch("GET", `${this.baseUrl}/timers/${encodeURIComponent(timerId)}/${updateMode}`);
     }
 }

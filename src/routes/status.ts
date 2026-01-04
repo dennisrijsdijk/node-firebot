@@ -14,6 +14,6 @@ export class StatusRoute extends ApiRoute {
      * @returns {StatusResponse} The status of the Firebot API.
      */
     async getStatus(): Promise<StatusResponse> {
-        return fetch(`${this.baseUrl}/status`).then(res => res.json()) as Promise<StatusResponse>;
+        return this.fetch("GET", `${this.baseUrl}/status`).then(res => res.json()) as Promise<StatusResponse>;
     }
 }

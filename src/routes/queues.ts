@@ -1,6 +1,5 @@
 import { ApiRoute } from "../api-route";
 import type { EffectQueueConfig } from "../types/queues";
-import { ApiStatusResponse } from "../types/api";
 import { EffectList } from "../types/effects";
 
 export class QueuesRoute extends ApiRoute {
@@ -11,7 +10,7 @@ export class QueuesRoute extends ApiRoute {
      * @returns {EffectQueueConfig[]} An array of effect queue configurations.
      */
     async getEffectQueues(): Promise<EffectQueueConfig[]> {
-        return fetch(`${this.baseUrl}/queues/`).then(res => res.json()) as Promise<EffectQueueConfig[]>;
+        return this.fetch("GET", `${this.baseUrl}/queues/`).then(res => res.json()) as Promise<EffectQueueConfig[]>;
     }
 
     /**
@@ -22,13 +21,8 @@ export class QueuesRoute extends ApiRoute {
      * @returns {EffectQueueConfig} The details of the specified effect queue.
      */
     async getEffectQueue(queueId: string): Promise<EffectQueueConfig> {
-        const response = await fetch(`${this.baseUrl}/queues/${encodeURIComponent(queueId)}`).then(res => res.json()) as EffectQueueConfig | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/queues/${encodeURIComponent(queueId)}`)
+            .then(res => res.json()) as Promise<EffectQueueConfig>;
     }
 
     /**
@@ -40,13 +34,8 @@ export class QueuesRoute extends ApiRoute {
      * @returns {EffectQueueConfig} The updated effect queue configuration.
      */
     async updateEffectQueue(queueId: string, updateMode: "pause" | "resume" | "toggle" | "clear"): Promise<EffectQueueConfig> {
-        const response = await fetch(`${this.baseUrl}/queues/${encodeURIComponent(queueId)}/${updateMode}`).then(res => res.json()) as EffectQueueConfig | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/queues/${encodeURIComponent(queueId)}/${updateMode}`)
+            .then(res => res.json()) as Promise<EffectQueueConfig>;
     }
 
     /**

@@ -1,5 +1,4 @@
 import { ApiRoute } from "../api-route";
-import { ApiStatusResponse } from "../types/api";
 
 export type FirebotFont = {
     name: string;
@@ -13,8 +12,8 @@ export class FontsRoute extends ApiRoute {
      * @throws {Error} If the API response indicates an error or a connection issue occurs.
      * @returns {FirebotFont[]} An array of fonts.
      */
-    getFonts(): Promise<FirebotFont[]> {
-        return fetch(`${this.baseUrl}/fonts`).then(res => res.json());
+    async getFonts(): Promise<FirebotFont[]> {
+        return this.fetch("GET", `${this.baseUrl}/fonts`).then(res => res.json()) as Promise<FirebotFont[]>;
     }
 
     /**
@@ -25,13 +24,6 @@ export class FontsRoute extends ApiRoute {
      * @returns {Blob} The font file as a Blob.
      */
     async getFont(fontName: string): Promise<Blob> {
-        const response = await fetch(`${this.baseUrl}/fonts/${encodeURIComponent(fontName)}`);
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message || `Failed to fetch font: ${fontName}`);
-        }
-
-        return response.blob();
+        return this.fetch("GET", `${this.baseUrl}/fonts/${encodeURIComponent(fontName)}`).then(res => res.blob());
     }
 }

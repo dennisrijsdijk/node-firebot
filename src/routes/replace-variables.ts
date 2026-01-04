@@ -9,6 +9,6 @@ export class ReplaceVariablesRoute extends ApiRoute {
      * @returns {ReplaceVariable[]} An array of replace variables.
      */
     async getReplaceVariables(): Promise<ReplaceVariable[]> {
-        return fetch(`${this.baseUrl}/variables`).then(res => res.json()) as Promise<ReplaceVariable[]>;
+        return this.fetch("GET", `${this.baseUrl}/variables`).then(res => res.json()) as Promise<ReplaceVariable[]>;
     }
 }

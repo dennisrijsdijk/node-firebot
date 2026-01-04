@@ -1,6 +1,5 @@
 import { ApiRoute } from "../api-route";
 import { FirebotEffect, EffectList, RunEffectsMetadata, PresetEffectList } from "../types/effects";
-import { ApiStatusResponse } from "../types/api";
 
 export class EffectsRoute extends ApiRoute {
     /**
@@ -10,7 +9,7 @@ export class EffectsRoute extends ApiRoute {
      * @returns {FirebotEffect[]} An array of effects.
      */
     async getEffects(): Promise<FirebotEffect[]> {
-        return fetch(`${this.baseUrl}/effects`).then(res => res.json()) as Promise<FirebotEffect[]>;
+        return this.fetch("GET", `${this.baseUrl}/effects`).then(res => res.json()) as Promise<FirebotEffect[]>;
     }
 
     /**
@@ -21,13 +20,8 @@ export class EffectsRoute extends ApiRoute {
      * @returns {FirebotEffect} The details of the specified effect.
      */
     async getEffect(effectId: string): Promise<FirebotEffect> {
-        const response = await fetch(`${this.baseUrl}/effects/${effectId}`).then(res => res.json()) as FirebotEffect | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/effects/${effectId}`)
+            .then(res => res.json()) as Promise<FirebotEffect>;
     }
 
     /**
@@ -38,20 +32,10 @@ export class EffectsRoute extends ApiRoute {
      * @param metadata - Metadata about the trigger for the effects.
      */
     async runEffects(effectList: EffectList, metadata: RunEffectsMetadata) {
-        const response = await fetch(`${this.baseUrl}/effects`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                effects: effectList,
-                triggerData: metadata
-            })
-        }).then(res => res.json()) as ApiStatusResponse;
-
-        if (response.status === "error") {
-            throw new Error(response.message);
-        }
+        await this.fetch("POST", `${this.baseUrl}/effects`, {
+            effects: effectList,
+            triggerData: metadata
+        });
     }
 
     /**
@@ -61,13 +45,7 @@ export class EffectsRoute extends ApiRoute {
      * @returns {PresetEffectList[]} An array of preset effect lists.
      */
     async getPresetEffectLists(): Promise<PresetEffectList[]> {
-        const response = await fetch(`${this.baseUrl}/effects/preset`).then(res => res.json()) as PresetEffectList[] | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/effects/preset`).then(res => res.json()) as Promise<PresetEffectList[]>;
     }
 
     /**
@@ -78,20 +56,9 @@ export class EffectsRoute extends ApiRoute {
      * @param username - Optional username of the user triggering the preset effect list.
      */
     async runPresetEffectList(presetListId: string, waitForCompletion: boolean = true, args?: Record<string, unknown>, username?: string) {
-        const url = `${this.baseUrl}/effects/preset/${presetListId}/${waitForCompletion ? "" : "run"}`;
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username,
-                args
-            })
-        }).then(res => res.json()) as ApiStatusResponse;
-
-        if (response.status === "error") {
-            throw new Error(response.message);
-        }
+        await this.fetch("POST", `${this.baseUrl}/effects/preset/${presetListId}/${waitForCompletion ? "" : "run"}`, {
+            username,
+            args
+        });
     }
 }

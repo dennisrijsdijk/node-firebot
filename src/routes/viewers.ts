@@ -1,5 +1,4 @@
 import { ApiRoute } from "../api-route";
-import { ApiStatusResponse } from "../types/api";
 import { BasicViewer, ExportViewer, SpecificViewer, ViewerCustomRole } from "../types/viewers";
 
 export class ViewersRoute extends ApiRoute {
@@ -10,7 +9,7 @@ export class ViewersRoute extends ApiRoute {
      * @returns {BasicViewer[]} An array of basic viewer information.
      */
     getViewers(): Promise<BasicViewer[]> {
-        return fetch(`${this.baseUrl}/viewers`).then(res => res.json()) as Promise<BasicViewer[]>;
+        return this.fetch("GET", `${this.baseUrl}/viewers`).then(res => res.json()) as Promise<BasicViewer[]>;
     }
 
     /**
@@ -22,13 +21,8 @@ export class ViewersRoute extends ApiRoute {
      * @returns {SpecificViewer} The details of the specified viewer.
      */
     async getViewer(viewerIdOrUsername: string, useViewerId: boolean = true): Promise<SpecificViewer> {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}?username=${!useViewerId}`).then(res => res.json() as Promise<SpecificViewer | ApiStatusResponse>);
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}?username=${!useViewerId}`)
+            .then(res => res.json()) as Promise<SpecificViewer>;
     }
 
     /**
@@ -38,7 +32,7 @@ export class ViewersRoute extends ApiRoute {
      * @returns {ExportViewer[]} An array of viewers with export information.
      */
     exportViewers(): Promise<ExportViewer[]> {
-        return fetch(`${this.baseUrl}/viewers/export`).then(res => res.json()) as Promise<ExportViewer[]>;
+        return this.fetch("GET", `${this.baseUrl}/viewers/export`).then(res => res.json()) as Promise<ExportViewer[]>;
     }
 
     /**
@@ -51,18 +45,9 @@ export class ViewersRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async setViewerMetadata(viewerIdOrUsername: string, key: string, value: string, useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/metadata/${encodeURIComponent(key)}?username=${!useViewerId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ data: value })
+        await this.fetch("POST", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/metadata/${encodeURIComponent(key)}?username=${!useViewerId}`, {
+            data: value
         });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message || `Failed to set metadata for viewer: ${viewerIdOrUsername}`);
-        }
     }
 
     /**
@@ -74,14 +59,7 @@ export class ViewersRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async deleteViewerMetadata(viewerIdOrUsername: string, key: string, useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/metadata/${encodeURIComponent(key)}?username=${!useViewerId}`, {
-            method: "DELETE"
-        });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message || `Failed to delete metadata for viewer: ${viewerIdOrUsername}`);
-        }
+        await this.fetch("DELETE", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/metadata/${encodeURIComponent(key)}?username=${!useViewerId}`);
     }
 
     /**
@@ -93,13 +71,8 @@ export class ViewersRoute extends ApiRoute {
      * @returns {Record<string, number>} A record of currency IDs and their corresponding balances.
      */
     async getViewerCurrencies(viewerIdOrUsername: string, useViewerId: boolean = true): Promise<Record<string, number>> {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/currencies?username=${!useViewerId}`).then(res => res.json() as Promise<Record<string, number> | ApiStatusResponse>);
-
-        if ("status" in response && response.status === "error") {
-            throw new Error((response as ApiStatusResponse).message);
-        }
-
-        return response as Record<string, number>;
+        return this.fetch("GET", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/currencies?username=${!useViewerId}`)
+            .then(res => res.json()) as Promise<Record<string, number>>;
     }
 
     /**
@@ -112,13 +85,8 @@ export class ViewersRoute extends ApiRoute {
      * @returns {number} The balance of the specified currency for the viewer.
      */
     async getViewerCurrency(viewerIdOrUsername: string, currencyId: string, useViewerId: boolean = true): Promise<number> {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/currencies/${encodeURIComponent(currencyId)}?username=${!useViewerId}`).then(res => res.json() as Promise<number | ApiStatusResponse>);
-
-        if (typeof response === "object") {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/currencies/${encodeURIComponent(currencyId)}?username=${!useViewerId}`)
+            .then(res => res.json()) as Promise<number>;
     }
 
     /**
@@ -132,18 +100,10 @@ export class ViewersRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async setViewerCurrency(viewerIdOrUsername: string, currencyId: string, amount: number, mode: "set" | "adjust", useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/currencies/${encodeURIComponent(currencyId)}?username=${!useViewerId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ amount, setAmount: mode === "set" })
+        await this.fetch("POST", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/currencies/${encodeURIComponent(currencyId)}?username=${!useViewerId}`, {
+            amount,
+            setAmount: mode === "set"
         });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message || `Failed to set currency for viewer: ${viewerIdOrUsername}`);
-        }
     }
 
     /**
@@ -155,13 +115,8 @@ export class ViewersRoute extends ApiRoute {
      * @returns {ViewerCustomRole[]} An array of custom roles assigned to the viewer.
      */
     async getViewerCustomRoles(viewerIdOrUsername: string, useViewerId: boolean = true): Promise<ViewerCustomRole[]> {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/customRoles?username=${!useViewerId}`).then(res => res.json() as Promise<ViewerCustomRole[] | ApiStatusResponse>);
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/customRoles?username=${!useViewerId}`)
+            .then(res => res.json()) as Promise<ViewerCustomRole[]>;
     }
 
     /**
@@ -171,14 +126,7 @@ export class ViewersRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async addViewerToCustomRole(viewerIdOrUsername: string, roleId: string, useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/customRoles/${encodeURIComponent(roleId)}?username=${!useViewerId}`, {
-            method: "POST"
-        });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message);
-        }
+        await this.fetch("POST", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/customRoles/${encodeURIComponent(roleId)}?username=${!useViewerId}`);
     }
 
     /**
@@ -190,13 +138,6 @@ export class ViewersRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async removeViewerFromCustomRole(viewerIdOrUsername: string, roleId: string, useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/customRoles/${encodeURIComponent(roleId)}?username=${!useViewerId}`, {
-            method: "DELETE"
-        });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message);
-        }
+        await this.fetch("DELETE", `${this.baseUrl}/viewers/${encodeURIComponent(viewerIdOrUsername)}/customRoles/${encodeURIComponent(roleId)}?username=${!useViewerId}`);
     }
 }

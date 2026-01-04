@@ -9,7 +9,7 @@ export class CustomVariablesRoute extends ApiRoute {
      * @returns {CustomVariable[]} An array of custom variables.
      */
     async getCustomVariables(): Promise<CustomVariable[]> {
-        const response = await fetch(`${this.baseUrl}/custom-variables`).then(res => res.json()) as Record<string, FirebotCustomVariable>;
+        const response = await this.fetch("GET", `${this.baseUrl}/custom-variables`).then(res => res.json()) as Record<string, FirebotCustomVariable>;
         return Object.entries(response).map(([name, variable]) => ({
             name,
             data: variable.v,
@@ -26,7 +26,7 @@ export class CustomVariablesRoute extends ApiRoute {
      * @returns {T} The data of the specified custom variable.
      */
     getCustomVariable<T>(variableName: string): Promise<T> {
-        return fetch(`${this.baseUrl}/custom-variables/${encodeURIComponent(variableName)}`).then(res => res.json()) as Promise<T>;
+        return this.fetch("GET", `${this.baseUrl}/custom-variables/${encodeURIComponent(variableName)}`).then(res => res.json()) as Promise<T>;
     }
 
     /**
@@ -43,16 +43,6 @@ export class CustomVariablesRoute extends ApiRoute {
             ttl
         };
 
-        const response = await fetch(`${this.baseUrl}/custom-variables/${encodeURIComponent(variableName)}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to set custom variable: ${variableName} (${response.statusText})`);
-        }
+        await this.fetch("POST", `${this.baseUrl}/custom-variables/${encodeURIComponent(variableName)}`, body);
     }
 }

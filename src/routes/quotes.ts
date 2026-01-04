@@ -1,6 +1,5 @@
 import { ApiRoute } from "../api-route";
 import { NewQuote, Quote } from "../types/quotes";
-import { ApiStatusResponse } from "../types/api";
 
 export class QuotesRoute extends ApiRoute {
     /**
@@ -10,7 +9,7 @@ export class QuotesRoute extends ApiRoute {
      * @returns {Quote[]} An array of quotes.
      */
     async getQuotes(): Promise<Quote[]> {
-        return fetch(`${this.baseUrl}/quotes`).then(res => res.json()) as Promise<Quote[]>;
+        return this.fetch("GET", `${this.baseUrl}/quotes`).then(res => res.json()) as Promise<Quote[]>;
     }
 
     /**
@@ -21,13 +20,7 @@ export class QuotesRoute extends ApiRoute {
      * @returns {Quote} The details of the specified quote.
      */
     async getQuote(quoteId: number): Promise<Quote> {
-        const response = await fetch(`${this.baseUrl}/quotes/${quoteId}`).then(res => res.json()) as Quote | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/quotes/${quoteId}`).then(res => res.json()) as Promise<Quote>;
     }
 
     /**
@@ -38,19 +31,7 @@ export class QuotesRoute extends ApiRoute {
      * @returns {Quote} The created quote.
      */
     async createQuote(quote: NewQuote): Promise<Quote> {
-        const response = await fetch(`${this.baseUrl}/quotes`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(quote)
-        });
-
-        if (!response.ok) {
-            throw new Error((await response.json() as ApiStatusResponse).message);
-        }
-
-        return response.json() as Promise<Quote>;
+        return this.fetch("POST", `${this.baseUrl}/quotes`, quote).then(res => res.json()) as Promise<Quote>;
     }
 
     /**
@@ -67,19 +48,8 @@ export class QuotesRoute extends ApiRoute {
         };
         delete firebotFormattedQuote.id;
 
-        const response = await fetch(`${this.baseUrl}/quotes/${firebotFormattedQuote._id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(firebotFormattedQuote)
-        });
-
-        if (!response.ok) {
-            throw new Error((await response.json() as ApiStatusResponse).message);
-        }
-
-        return response.json() as Promise<Quote>;
+        return this.fetch("PUT", `${this.baseUrl}/quotes/${firebotFormattedQuote._id}`, firebotFormattedQuote)
+            .then(res => res.json()) as Promise<Quote>;
     }
 
     /**
@@ -91,19 +61,8 @@ export class QuotesRoute extends ApiRoute {
      * @returns {Quote} The updated quote.
      */
     async updateQuote(quoteId: number, quoteUpdates: Partial<Quote>): Promise<Quote> {
-        const response = await fetch(`${this.baseUrl}/quotes/${quoteId}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(quoteUpdates)
-        });
-
-        if (!response.ok) {
-            throw new Error((await response.json() as ApiStatusResponse).message);
-        }
-
-        return response.json() as Promise<Quote>;
+        return this.fetch("PATCH", `${this.baseUrl}/quotes/${quoteId}`, quoteUpdates)
+            .then(res => res.json()) as Promise<Quote>;
     }
 
     /**
@@ -113,12 +72,6 @@ export class QuotesRoute extends ApiRoute {
      * @param quoteId - The ID of the quote to delete.
      */
     async deleteQuote(quoteId: number): Promise<void> {
-        const response = await fetch(`${this.baseUrl}/quotes/${quoteId}`, {
-            method: "DELETE"
-        });
-
-        if (!response.ok) {
-            throw new Error((await response.json() as ApiStatusResponse).message);
-        }
+        await this.fetch("DELETE", `${this.baseUrl}/quotes/${quoteId}`);
     }
 }

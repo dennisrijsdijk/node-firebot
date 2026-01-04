@@ -9,7 +9,7 @@ export class CurrencyRoute extends ApiRoute {
      * @returns {Currency[]} An array of currencies.
      */
     async getCurrencies(): Promise<Currency[]> {
-        return fetch(`${this.baseUrl}/currency`).then(res => res.json()) as Promise<Currency[]>;
+        return this.fetch("GET", `${this.baseUrl}/currency`).then(res => res.json()) as Promise<Currency[]>;
     }
 
     /**
@@ -20,7 +20,7 @@ export class CurrencyRoute extends ApiRoute {
      * @returns {Currency} The details of the specified currency.
      */
     async getCurrency(currencyName: string): Promise<Currency> {
-        const response = await fetch(`${this.baseUrl}/currency/${encodeURIComponent(currencyName)}`);
+        const response = await this.fetch("GET", `${this.baseUrl}/currency/${encodeURIComponent(currencyName)}`);
 
         if ((await (response.clone().text())).length === 0) {
             throw new Error(`Currency not found: ${currencyName}`);
@@ -38,12 +38,7 @@ export class CurrencyRoute extends ApiRoute {
      * @returns {Currency[]} An array of top viewers for the specified currency.
      */
     async getTopViewersByCurrency(currencyName: string, limit: number = 10): Promise<TopCurrencyViewer[]> {
-        const response = await fetch(`${this.baseUrl}/currency/${encodeURIComponent(currencyName)}/top?limit=${limit}`);
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch top viewers for currency: ${currencyName}`);
-        }
-
-        return response.json() as Promise<TopCurrencyViewer[]>;
+        return this.fetch("GET", `${this.baseUrl}/currency/${encodeURIComponent(currencyName)}/top?limit=${limit}`)
+            .then(res => res.json()) as Promise<TopCurrencyViewer[]>;
     }
 }

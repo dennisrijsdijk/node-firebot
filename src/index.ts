@@ -1,16 +1,16 @@
-import { StatusRoute } from "./routes/status";
-import { EffectsRoute } from "./routes/effects";
 import { CommandsRoute } from "./routes/commands";
-import { FontsRoute } from "./routes/fonts";
-import { CustomVariablesRoute } from "./routes/custom-variables";
-import { ReplaceVariablesRoute } from "./routes/replace-variables";
-import { ViewersRoute } from "./routes/viewers";
-import { CustomRolesRoute } from "./routes/custom-roles";
-import { CurrencyRoute } from "./routes/currency";
-import { QuotesRoute } from "./routes/quotes";
 import { CountersRoute } from "./routes/counters";
-import { TimersRoute } from "./routes/timers";
+import { CurrencyRoute } from "./routes/currency";
+import { CustomRolesRoute } from "./routes/custom-roles";
+import { CustomVariablesRoute } from "./routes/custom-variables";
+import { EffectsRoute } from "./routes/effects";
+import { FontsRoute } from "./routes/fonts";
 import { QueuesRoute } from "./routes/queues";
+import { QuotesRoute } from "./routes/quotes";
+import { ReplaceVariablesRoute } from "./routes/replace-variables";
+import { StatusRoute } from "./routes/status";
+import { TimersRoute } from "./routes/timers";
+import { ViewersRoute } from "./routes/viewers";
 import { FirebotWebSocket } from "./websocket";
 import type { ApiRoute } from "./api-route";
 
@@ -20,72 +20,72 @@ export class FirebotClient {
     private baseUrl: string;
 
     // routes
-    private _statusRoute: StatusRoute;
-    private _effectsRoute: EffectsRoute;
     private _commandsRoute: CommandsRoute;
-    private _fontsRoute: FontsRoute;
-    private _customVariablesRoute: CustomVariablesRoute;
-    private _replaceVariablesRoute: ReplaceVariablesRoute;
-    private _viewersRoute: ViewersRoute;
-    private _customRolesRoute: CustomRolesRoute;
-    private _currencyRoute: CurrencyRoute;
-    private _quotesRoute: QuotesRoute;
     private _countersRoute: CountersRoute;
-    private _timersRoute: TimersRoute;
+    private _currencyRoute: CurrencyRoute;
+    private _customRolesRoute: CustomRolesRoute;
+    private _customVariablesRoute: CustomVariablesRoute;
+    private _effectsRoute: EffectsRoute;
+    private _fontsRoute: FontsRoute;
     private _queuesRoute: QueuesRoute;
+    private _quotesRoute: QuotesRoute;
+    private _replaceVariablesRoute: ReplaceVariablesRoute;
+    private _statusRoute: StatusRoute;
+    private _timersRoute: TimersRoute;
+    private _viewersRoute: ViewersRoute;
 
     private _ws: FirebotWebSocket;
 
-    get status(): StatusRoute {
-        return this._statusRoute;
-    }
-
-    get effects(): EffectsRoute {
-        return this._effectsRoute;
-    }
-
     get commands(): CommandsRoute {
         return this._commandsRoute;
-    }
-
-    get fonts(): FontsRoute {
-        return this._fontsRoute;
-    }
-
-    get customVariables(): CustomVariablesRoute {
-        return this._customVariablesRoute;
-    }
-
-    get replaceVariables(): ReplaceVariablesRoute {
-        return this._replaceVariablesRoute;
-    }
-
-    get viewers(): ViewersRoute {
-        return this._viewersRoute;
-    }
-
-    get customRoles(): CustomRolesRoute {
-        return this._customRolesRoute;
-    }
-
-    get currency(): CurrencyRoute {
-        return this._currencyRoute;
-    }
-
-    get quotes(): QuotesRoute {
-        return this._quotesRoute;
     }
 
     get counters(): CountersRoute {
         return this._countersRoute;
     }
 
-    get timers(): TimersRoute {
-        return this._timersRoute;
+    get currency(): CurrencyRoute {
+        return this._currencyRoute;
+    }
+
+    get customRoles(): CustomRolesRoute {
+        return this._customRolesRoute;
+    }
+
+    get customVariables(): CustomVariablesRoute {
+        return this._customVariablesRoute;
+    }
+
+    get effects(): EffectsRoute {
+        return this._effectsRoute;
+    }
+
+    get fonts(): FontsRoute {
+        return this._fontsRoute;
     }
 
     get queues(): QueuesRoute {
         return this._queuesRoute;
+    }
+
+    get quotes(): QuotesRoute {
+        return this._quotesRoute;
+    }
+
+    get replaceVariables(): ReplaceVariablesRoute {
+        return this._replaceVariablesRoute;
+    }
+
+    get status(): StatusRoute {
+        return this._statusRoute;
+    }
+
+    get timers(): TimersRoute {
+        return this._timersRoute;
+    }
+
+    get viewers(): ViewersRoute {
+        return this._viewersRoute;
     }
 
     get websocket(): FirebotWebSocket {
@@ -104,19 +104,19 @@ export class FirebotClient {
         this.baseUrl = `http${secure ? "s" : ""}://${this.host}:${this.port}/api/v1`;
 
         // initialize routes
-        this._statusRoute = new StatusRoute(this, this.baseUrl);
-        this._effectsRoute = new EffectsRoute(this, this.baseUrl);
         this._commandsRoute = new CommandsRoute(this, this.baseUrl);
-        this._fontsRoute = new FontsRoute(this, this.baseUrl);
-        this._customVariablesRoute = new CustomVariablesRoute(this, this.baseUrl);
-        this._replaceVariablesRoute = new ReplaceVariablesRoute(this, this.baseUrl);
-        this._viewersRoute = new ViewersRoute(this, this.baseUrl);
-        this._customRolesRoute = new CustomRolesRoute(this, this.baseUrl);
-        this._currencyRoute = new CurrencyRoute(this, this.baseUrl);
-        this._quotesRoute = new QuotesRoute(this, this.baseUrl);
         this._countersRoute = new CountersRoute(this, this.baseUrl);
-        this._timersRoute = new TimersRoute(this, this.baseUrl);
+        this._currencyRoute = new CurrencyRoute(this, this.baseUrl);
+        this._customRolesRoute = new CustomRolesRoute(this, this.baseUrl);
+        this._customVariablesRoute = new CustomVariablesRoute(this, this.baseUrl);
+        this._effectsRoute = new EffectsRoute(this, this.baseUrl);
+        this._fontsRoute = new FontsRoute(this, this.baseUrl);
         this._queuesRoute = new QueuesRoute(this, this.baseUrl);
+        this._quotesRoute = new QuotesRoute(this, this.baseUrl);
+        this._replaceVariablesRoute = new ReplaceVariablesRoute(this, this.baseUrl);
+        this._statusRoute = new StatusRoute(this, this.baseUrl);
+        this._timersRoute = new TimersRoute(this, this.baseUrl);
+        this._viewersRoute = new ViewersRoute(this, this.baseUrl);
 
         this._ws = new FirebotWebSocket(this.host, this.port, secure);
     }

@@ -1,6 +1,5 @@
 import { ApiRoute } from "../api-route";
 import type { SimpleCounter, Counter, UpdateCounterResponse } from "../types/counters";
-import { ApiStatusResponse } from "../types/api";
 
 export class CountersRoute extends ApiRoute {
     /**
@@ -10,7 +9,8 @@ export class CountersRoute extends ApiRoute {
      * @returns {SimpleCounter[]} An array of simple counters.
      */
     async getCounters(): Promise<SimpleCounter[]> {
-        return fetch(`${this.baseUrl}/counters`).then(res => res.json()) as Promise<SimpleCounter[]>;
+        return this.fetch("GET", `${this.baseUrl}/counters`)
+            .then(res => res.json()) as Promise<SimpleCounter[]>;
     }
 
     /**
@@ -21,13 +21,8 @@ export class CountersRoute extends ApiRoute {
      * @returns {Counter} The details of the specified counter.
      */
     async getCounter(counterId: string): Promise<Counter> {
-        const response = await fetch(`${this.baseUrl}/counters/${encodeURIComponent(counterId)}`).then(res => res.json()) as Counter | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/counters/${encodeURIComponent(counterId)}`)
+            .then(res => res.json()) as Promise<Counter>;
     }
 
     /**
@@ -40,18 +35,9 @@ export class CountersRoute extends ApiRoute {
      * @returns {UpdateCounterResponse} The response from the API after updating the counter.
      */
     async updateCounter(counterId: string, value: number, override: boolean = false): Promise<UpdateCounterResponse> {
-        const response = await fetch(`${this.baseUrl}/counters/${encodeURIComponent(counterId)}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ value, override })
-        });
-
-        if (!response.ok) {
-            throw new Error((await response.json() as ApiStatusResponse).message);
-        }
-
-        return response.json() as Promise<UpdateCounterResponse>;
+        return this.fetch("POST", `${this.baseUrl}/counters/${encodeURIComponent(counterId)}`, {
+            value,
+            override
+        }).then(res => res.json()) as Promise<UpdateCounterResponse>;
     }
 }

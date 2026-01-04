@@ -1,5 +1,4 @@
 import { ApiRoute } from "../api-route";
-import { ApiStatusResponse } from "../types/api";
 import { CustomRole } from "../types/custom-roles";
 
 export class CustomRolesRoute extends ApiRoute {
@@ -10,7 +9,8 @@ export class CustomRolesRoute extends ApiRoute {
      * @returns {CustomRole[]} An array of custom roles.
      */
     async getCustomRoles(): Promise<CustomRole[]> {
-        return fetch(`${this.baseUrl}/customRoles`).then(res => res.json()) as Promise<CustomRole[]>;
+        return this.fetch("GET", `${this.baseUrl}/customRoles`)
+            .then(res => res.json()) as Promise<CustomRole[]>;
     }
 
     /**
@@ -21,13 +21,8 @@ export class CustomRolesRoute extends ApiRoute {
      * @returns {CustomRole} The details of the specified custom role.
      */
     async getCustomRoleById(roleId: string): Promise<CustomRole> {
-        const response = await fetch(`${this.baseUrl}/customRoles/${roleId}`).then(res => res.json()) as CustomRole | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.fetch("GET", `${this.baseUrl}/customRoles/${roleId}`)
+            .then(res => res.json()) as Promise<CustomRole>;
     }
 
     /**
@@ -37,12 +32,7 @@ export class CustomRolesRoute extends ApiRoute {
      * @param roleId - The ID of the custom role to clear viewers from.
      */
     async clearCustomRoleViewers(roleId: string) {
-        const response = await fetch(`${this.baseUrl}/customRoles/${roleId}/clear`);
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message);
-        }
+        await this.fetch("GET", `${this.baseUrl}/customRoles/${roleId}/clear`);
     }
 
     /**
@@ -54,14 +44,7 @@ export class CustomRolesRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async addViewerToCustomRole(viewerIdOrUsername: string, roleId: string, useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/customRoles/${roleId}/viewer/${encodeURIComponent(viewerIdOrUsername)}?username=${!useViewerId}`, {
-            method: "POST"
-        });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message);
-        }
+        await this.fetch("POST", `${this.baseUrl}/customRoles/${roleId}/viewer/${encodeURIComponent(viewerIdOrUsername)}?username=${!useViewerId}`);
     }
 
     /**
@@ -73,13 +56,6 @@ export class CustomRolesRoute extends ApiRoute {
      * @param useViewerId - Set to true to indicate that viewerIdOrUsername is an ID. False for username. Defaults to true.
      */
     async removeViewerFromCustomRole(viewerIdOrUsername: string, roleId: string, useViewerId: boolean = true) {
-        const response = await fetch(`${this.baseUrl}/customRoles/${roleId}/viewer/${encodeURIComponent(viewerIdOrUsername)}?username=${!useViewerId}`, {
-            method: "DELETE"
-        });
-
-        if (!response.ok) {
-            const errorResponse = await response.json() as ApiStatusResponse;
-            throw new Error(errorResponse.message);
-        }
+        await this.fetch("DELETE", `${this.baseUrl}/customRoles/${roleId}/viewer/${encodeURIComponent(viewerIdOrUsername)}?username=${!useViewerId}`);
     }
 }

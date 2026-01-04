@@ -1,8 +1,25 @@
 import { ApiRoute } from "../api-route";
 import { CustomCommand, CommandDefinition, SystemCommand } from "../types/commands";
-import { ApiStatusResponse, MetadataWithUsername } from "../types/api";
+import { MetadataWithUsername } from "../types/api";
 
 export class CommandsRoute extends ApiRoute {
+    private async getCommands(type: "custom" | "system"): Promise<CustomCommand[] | SystemCommand[]> {
+        return this.fetch("GET", `${this.baseUrl}/commands/${type}`)
+            .then(res => res.json()) as Promise<CustomCommand[] | SystemCommand[]>;
+    }
+
+    private async getCommand(type: "custom" | "system", commandId: string): Promise<CommandDefinition> {
+        return this.fetch("GET", `${this.baseUrl}/commands/${type}/${commandId}`)
+            .then(res => res.json()) as Promise<CommandDefinition>;
+    }
+
+    private async runCommand(commandType: "custom" | "system", commandId: string, args?: string, metadata?: MetadataWithUsername): Promise<void> {
+        await this.fetch("POST", `${this.baseUrl}/commands/${commandType}/${commandId}/run`, {
+            args: args,
+            metadata: metadata
+        });
+    }
+
     /**
      * Fetches the list of custom commands from the Firebot API.
      *
@@ -10,13 +27,7 @@ export class CommandsRoute extends ApiRoute {
      * @returns {CustomCommand[]} An array of custom commands.
      */
     async getCustomCommands(): Promise<CustomCommand[]> {
-        const response = await fetch(`${this.baseUrl}/commands/custom`).then(res => res.json()) as CustomCommand[] | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.getCommands("custom") as Promise<CustomCommand[]>;
     }
 
     /**
@@ -27,13 +38,7 @@ export class CommandsRoute extends ApiRoute {
      * @returns {CommandDefinition} The details of the specified custom command.
      */
     async getCustomCommand(commandId: string): Promise<CommandDefinition> {
-        const response = await fetch(`${this.baseUrl}/commands/custom/${commandId}`).then(res => res.json()) as CommandDefinition | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.getCommand("custom", commandId);
     }
 
     /**
@@ -43,13 +48,7 @@ export class CommandsRoute extends ApiRoute {
      * @returns {SystemCommand[]} An array of system commands.
      */
     async getSystemCommands(): Promise<SystemCommand[]> {
-        const response = await fetch(`${this.baseUrl}/commands/system`).then(res => res.json()) as SystemCommand[] | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.getCommands("system") as Promise<SystemCommand[]>;
     }
 
     /**
@@ -60,13 +59,7 @@ export class CommandsRoute extends ApiRoute {
      * @returns {CommandDefinition} The details of the specified system command.
      */
     async getSystemCommand(commandId: string): Promise<CommandDefinition> {
-        const response = await fetch(`${this.baseUrl}/commands/system/${commandId}`).then(res => res.json()) as CommandDefinition | ApiStatusResponse;
-
-        if ("status" in response) {
-            throw new Error(response.message);
-        }
-
-        return response;
+        return this.getCommand("system", commandId);
     }
 
     /**
@@ -78,20 +71,7 @@ export class CommandsRoute extends ApiRoute {
      * @param metadata - Optional metadata including username information.
      */
     async runCustomCommand(commandId: string, args?: string, metadata?: MetadataWithUsername): Promise<void> {
-        const response = await fetch(`${this.baseUrl}/commands/custom/${commandId}/run`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                args: args,
-                metadata: metadata
-            })
-        }).then(res => res.json()) as ApiStatusResponse;
-
-        if (response.status === "error") {
-            throw new Error(response.message);
-        }
+        return this.runCommand("custom", commandId, args, metadata);
     }
 
     /**
@@ -103,19 +83,6 @@ export class CommandsRoute extends ApiRoute {
      * @param metadata - Optional metadata including username information.
      */
     async runSystemCommand(commandId: string, args?: string, metadata?: MetadataWithUsername): Promise<void> {
-        const response = await fetch(`${this.baseUrl}/commands/system/${commandId}/run`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                args: args,
-                metadata: metadata
-            })
-        }).then(res => res.json()) as ApiStatusResponse;
-
-        if (response.status === "error") {
-            throw new Error(response.message);
-        }
+        return this.runCommand("system", commandId, args, metadata);
     }
 }
