@@ -8,6 +8,9 @@
   "main": "dist/node-firebot.cjs",
   "module": "dist/node-firebot.mjs",
   "types": "dist/node-firebot.d.ts",
+  "repository": {
+    "url": "https://github.com/dennisrijsdijk/node-firebot"
+  },
   "exports": {
     ".": {
       "types": "./dist/node-firebot.d.ts",

@@ -7,7 +7,7 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 jobs:
   checkversion:
@@ -43,9 +43,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Nodejs
-        uses: actions/setup-node@5
+        uses: actions/setup-node@v6
         with:
-          node-verison: "22.19.0"
+          node-version: "22.19.0"
 
       - name: Update NPM version
         run: npm install -g npm@11.5.1
@@ -67,7 +67,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag v${{ needs.checkversion.outputs.version }}
-          git push origin v${{ needs.checkoutversion.outputs.version }}
+          git push origin v${{ needs.checkversion.outputs.version }}
 
       - name: Publish to NPM
         run: npm publish --access public

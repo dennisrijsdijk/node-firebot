@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Nodejs
-        uses: actions/setup-node@5
+        uses: actions/setup-node@v6
         with:
-          node-verison: "22.19.0"
+          node-version: "22.19.0"
 
       - name: Install correct NPM version
         run: npm install -g npm@11.5.1
