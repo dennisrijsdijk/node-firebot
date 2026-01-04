@@ -98,3 +98,7 @@ describe("CustomRolesRoute", () => {
 describe("CurrencyRoute", () => {
     generateStandardRouteTests("currency");
 });
+
+describe("QuotesRoute", () => {
+    generateStandardRouteTests("quotes");
+});
