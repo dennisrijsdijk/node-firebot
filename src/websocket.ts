@@ -57,6 +57,8 @@ export class FirebotWebSocket {
     private handleClose(code: number, reason?: Buffer): void {
         this.stopKeepAlive();
         this.emit("disconnected", { code, reason: reason?.toString() });
+        this._ws?.removeAllListeners();
+        this._ws = undefined;
     }
 
     private handleError(error: Error): void {
@@ -64,9 +66,7 @@ export class FirebotWebSocket {
     }
 
     connect(): void {
-        if (this._ws) {
-            this._ws.close(4001);
-        }
+        this.disconnect(4001);
 
         this._ws = new WebSocket(this._url)
             .on("open", this.handleOpen.bind(this))
@@ -76,14 +76,8 @@ export class FirebotWebSocket {
             .on("error", this.handleError.bind(this));
     }
 
-    disconnect(): void {
-        if (this._ws) {
-            this._ws.close();
-            this._ws.removeAllListeners();
-            this._ws = undefined;
-        }
-
-        this.stopKeepAlive();
+    disconnect(code?: number, message?: string): void {
+        this._ws?.close(code, message);
     }
 
     send(name: string, data?: object, id?: number | string) {
@@ -144,7 +138,6 @@ export class FirebotWebSocket {
     private handlePongTimeout(): void {
         this.emit("error", new Error("WebSocket pong timeout"));
         // Close with a specific code to indicate timeout.
-        this._ws?.close(4002, "Pong timeout");
-        this.stopKeepAlive();
+        this.disconnect(4002, "Pong timeout");
     }
 }
